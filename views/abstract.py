@@ -41,7 +41,7 @@ class AbstractView(ABC):
     def get_string_value(self, first_argument: str, second_argument: str):
         validate = ""
         while validate != "Y":
-            value = input(f"Veuillez saisir {first_argument} du {second_argument}:")
+            value = input(f"Veuillez saisir {first_argument} du {second_argument}: ")
             if not value:
                 print(
                     f"Votre saisie n'a pas été comprise, veuillez rééssayer d'indiquer {first_argument} du {second_argument}"
@@ -55,7 +55,7 @@ class AbstractView(ABC):
     def get_integer_value(self, first_argument: str, second_argument: str):
         validate = ""
         while validate != "Y":
-            value = input(f"Veuillez saisir {first_argument} du {second_argument}:")
+            value = input(f"Veuillez saisir {first_argument} du {second_argument}: ")
             if not value.isnumeric() or not value:
                 print(
                     f"Votre saisie n'a pas été comprise, veuillez rééssayer d'indiquer {first_argument} du {second_argument}"

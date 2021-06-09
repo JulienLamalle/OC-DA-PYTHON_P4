@@ -12,7 +12,7 @@ class SchedulerController:
         user_choice = ""
         while user_choice != 0:
             self.tournament_controller.tournament_view.main_menu_who_display_possible_choice_to_user()
-            user_choice = self.tournament_controller.tournament_view.get_user_choice(5)
+            user_choice = self.tournament_controller.tournament_view.get_user_choice(6)
             self.execute_user_choice(user_choice)
     
     def create_new_player(self):

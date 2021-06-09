@@ -1,1 +1,1 @@
-{"PLAYERS": {"1": {"first_name": "Julien", "last_name": "Lamalle", "date_of_birth": "08/09/1995", "sex": "M", "ranking": "1"}}}
+{"PLAYERS": {"1": {"first_name": "Julien", "last_name": "Lamalle", "date_of_birth": "08/09/1995", "sex": "M", "ranking": "1"}}, "TOURNAMENTS": {"1": {"name": "Nouveau tournoi", "location": "Dreux", "start_date": "09/09/21", "end_date": "09/09/21", "description": "Tournoi de fou", "time_control": "Blitz", "number_of_turn": 4}}}
