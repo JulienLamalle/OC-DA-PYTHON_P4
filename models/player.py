@@ -16,3 +16,11 @@ class Player:
             "ranking": self.ranking
         }
         return player
+
+    @property
+    def serialize_match_player(self):
+        return {
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "id": self.player_id
+        }

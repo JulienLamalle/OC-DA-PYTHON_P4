@@ -7,6 +7,7 @@ class AbstractView(ABC):
     def main_menu_who_display_possible_choice_to_user():
         print("1. Ajouter un nouveau joueur")
         print("2. Créer un tournoi")
+        print("3. Reprendre avec un tournoi existant")
         print("0. Quitter le programme")
         
     @staticmethod 

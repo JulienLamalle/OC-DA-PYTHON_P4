@@ -15,6 +15,15 @@ class PlayersDatabaseController:
     def search_in_players_table(self, first_name: str, last_name: str):
         for player in self.players:
             if player["first_name"] == first_name and player["last_name"] == last_name:
-                existant_result = player
-                return existant_result
+                return player
+        return None
+    
+    def get_player_id(self, first_name: str, last_name: str):
+        player = self.search_in_players_table(first_name, last_name)
+        return player.doc_id if player else None
+    
+    def search_player_by_id(self, player_id):
+        player = self.players.get(doc_id=int(player_id))
+        if player:
+            return player
         return None
