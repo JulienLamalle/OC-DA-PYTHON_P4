@@ -46,11 +46,11 @@ class Tournament:
         return serialized_rounds
     
     def sort_players_by_score(self):
-        sorted_players = sorted(self.players, key=lambda player: (player.score, player.ranking))
+        sorted_players = sorted(self.players, key=lambda player: (player.score, player.ranking), reverse=True)
         return sorted_players
     
     def sort_players_by_rank(self):
-        sorted_players = sorted(self.players, key=lambda player: player.ranking)
+        sorted_players = sorted(self.players, key=lambda player: player.ranking, reverse=True)
         return sorted_players
     
     def generate_first_round_pairs(self):

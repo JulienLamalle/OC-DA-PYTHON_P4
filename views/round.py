@@ -1,6 +1,7 @@
 from views.abstract import AbstractView
 from utils.utils import is_float as isFloat
 
+from models.tournament import Tournament
 class RoundView(AbstractView):
     @staticmethod
     def display_round_sub_menu():
@@ -27,3 +28,49 @@ class RoundView(AbstractView):
                 validation = self.request_confirmation()
                 if validation == "Y":
                     return float(score)
+                
+    @staticmethod        
+    def display_rounds_header():
+        print(
+            f"{'Nom'.center(25)} | "
+            f"{'Début de ronde'.center(35)} | "
+            f"{'Fin de ronde'.center(35)}"
+            f"\n{'°' * 100}"
+        )
+    
+    @staticmethod
+    def display_rounds_list(tournament: Tournament):
+        for game_round in tournament.rounds:
+            print(
+                f"{game_round.name.center(25)} | "
+                f"{game_round.created_at.center(35)} | "
+                f"{game_round.finished_at.center(35)}"
+                f"\n{'-' * 100}"
+            )
+            
+    @staticmethod
+    def display_matchs_list(tournament: Tournament):
+        for game_round in tournament.rounds:
+            print(f"\n{'=' * 119}")
+            print(f"{'-' * 20}".center(119))
+            print(f"{game_round.name.center(119)}")
+            print(f"{'-' * 20}".center(119))
+            print(
+                f"{'Nom'.center(20)} | "
+                f"{'Prénom'.center(20)} | "
+                f"{'Score'.center(25)} | "
+                f"{'Nom'.center(20)} | "
+                f"{'Prénom'.center(20)}"
+                f"\n{'°' * 119}"
+            )
+            for match in game_round.serialize_match:
+                print(
+                    f"{match['match'][0][0]['last_name'].center(20)} | "
+                    f"{match['match'][0][0]['first_name'].center(20)} | "
+                    f"{str(match['match'][0][1]).center(11)} | "
+                    f"{str(match['match'][1][1]).center(11)} | "
+                    f"{match['match'][1][0]['last_name'].center(20)} | "
+                    f"{match['match'][1][0]['first_name'].center(20)}"
+                    f"\n{'-' * 119}"
+                )
+        

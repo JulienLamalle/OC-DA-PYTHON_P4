@@ -19,8 +19,8 @@ class PlayerView(AbstractView):
     def print_players_tournament_ranking(self, players):
         print(
             f"{'Classement'.center(15)} | "
-            f"{'Nom'.center(30)} | "
             f"{'Prénom'.center(30)} | "
+            f"{'Nom'.center(30)} | "
             f"{'Score'.center(15)} | "
             f"{'Niveau'.center(15)}"
         )

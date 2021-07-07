@@ -8,6 +8,8 @@ class AbstractView(ABC):
         print("1. Ajouter un nouveau joueur")
         print("2. Créer un tournoi")
         print("3. Reprendre avec un tournoi existant")
+        print("4. Afficher la liste des joueurs")
+        print("5. Afficher la liste des tournois")
         print("0. Quitter le programme")
         
     @staticmethod 
@@ -30,6 +32,17 @@ class AbstractView(ABC):
         while validation not in ["Y", "N"]:
             validation = input("Confirmez-vous cela ? (Y/N)").upper()
             if validation not in ["Y", "N"]:
+                print(
+                    "Je n'ai pas pu identifier votre réponse, veuillez la saisir à nouveau s'il vous plaît."
+                )
+            return validation
+        
+    @staticmethod
+    def request_user_validation_for_return():
+        validation = ""
+        while validation not in ["Y"]:
+            validation = input("Pour retourner au menu veuillez saisir 'Y' ").upper()
+            if validation not in ["Y"]:
                 print(
                     "Je n'ai pas pu identifier votre réponse, veuillez la saisir à nouveau s'il vous plaît."
                 )

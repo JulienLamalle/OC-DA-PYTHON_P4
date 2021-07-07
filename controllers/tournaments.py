@@ -164,3 +164,17 @@ class TournamentsController(AbstractController):
         else:
             self.round_view.display_message_to_user(f"Le tour {tournament.current_round - 1} est terminé !")
         self.tournaments_db.update_tournament(tournament)
+        
+    def display_tournament_rounds(self, tournament: Tournament):
+        self.round_view.display_rounds_header()
+        self.round_view.display_rounds_list(tournament)
+        validation = self.round_view.request_user_validation_for_return()
+        if validation == "Y": 
+            return
+        
+    def display_tournament_matchs(self, tournament: Tournament):
+        self.round_view.display_matchs_list(tournament)
+        validation = self.round_view.request_user_validation_for_return()
+        if validation == "Y": 
+            return
+        

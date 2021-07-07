@@ -87,7 +87,7 @@ class SchedulerController:
                     self.tournament_controller.tournament_view.display_message_to_user(
                         "Liste des rondes."
                     )
-                    self.tournament_controller.print_rounds_tournament(tournament)
+                    self.tournament_controller.display_tournament_rounds(tournament)
                 elif user_choice == 4:
                     self.tournament_controller.tournament_view.print_current_tournament(
                         tournament
@@ -95,7 +95,7 @@ class SchedulerController:
                     self.tournament_controller.tournament_view.display_message_to_user(
                         "Liste des matches."
                     )
-                    self.tournament_controller.print_matches_tournament(tournament)
+                    self.tournament_controller.display_tournament_matchs(tournament)
                 elif user_choice == 0:
                     self.perform()
             user_choice = ""
@@ -107,18 +107,18 @@ class SchedulerController:
                 self.tournament_controller.tournament_view.display_message_to_user(
                     "Résultat du tournoi"
                 )
-                self.tournament_controller.print_players_tournament(tournament)
+                self.tournament_controller.print_tournament_players(tournament)
             elif user_choice == 2:
                 self.tournament_controller.tournament_view.print_current_tournament(
                     tournament
                 )
                 self.tournament_controller.tournament_view.display_message_to_user("Liste des rondes.")
-                self.tournament_controller.print_rounds_tournament(tournament)
+                self.tournament_controller.display_tournament_rounds(tournament)
             elif user_choice == 3:
                 self.tournament_controller.tournament_view.print_current_tournament(
                     tournament
                 )
                 self.tournament_controller.tournament_view.display_message_to_user("Liste des mathes.")
-                self.tournament_controller.print_matches_tournament(tournament)
+                self.tournament_controller.display_tournament_matchs(tournament)
             if user_choice == 0:
                 self.perform()
