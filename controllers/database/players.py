@@ -1,4 +1,5 @@
 from tinydb import TinyDB, Query
+from models.player import Player
 
 DATABASE = TinyDB("db/db.json")
 PLAYERS = DATABASE.table("PLAYERS")
@@ -8,6 +9,16 @@ class PlayersDatabaseController:
     
     def __init__(self):
         self.players = PLAYERS
+        
+    @property
+    def sort_players_alphabetically(self):
+        sorted_players = sorted(self.players, key=lambda player: player["last_name"])
+        return sorted_players
+    
+    @property
+    def sort_players_by_ranking(self):
+        sorted_players = sorted(self.players, key=lambda player: player["ranking"])
+        return sorted_players
 
     def save_player(self, player: object):
         self.players.insert(player.serialize_player)
@@ -27,3 +38,6 @@ class PlayersDatabaseController:
         if player:
             return player
         return None
+    
+    def update_player(self, player: Player, player_id: int):
+        self.players.update(player.serialize_player, doc_ids=[int(player_id)])

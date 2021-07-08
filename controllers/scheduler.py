@@ -36,10 +36,29 @@ class SchedulerController:
             1: self.create_new_player,
             2: self.create_new_tournament,
             3: self.use_existing_tournament,
+            4: self.display_players,
             0: self.exit_program
         }
         getattr(commands[user_choice]())
         
+    def display_players(self):
+        players = self.player_controller.index()
+        if players:
+            user_choice = self.player_controller.player_view.get_user_choice(4)
+            self.execute_user_choice_about_players(user_choice)
+        
+    def execute_user_choice_about_players(self, user_choice: int):
+        if user_choice == 1:
+            self.player_controller.create()
+            self.display_players()
+        elif user_choice == 2:
+            self.player_controller.update_players_ranking()
+            self.display_players()
+        elif user_choice == 3:
+            self.player_controller.display_players_by_ranking()
+            self.display_players()
+        elif user_choice == 0:
+            self.perform()
     
     def use_existing_tournament(self):
         self.tournament_controller.tournament_view.display_message_to_user("Utiliser un tournoi déjà existant")

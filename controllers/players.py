@@ -4,6 +4,23 @@ from models.participant import Participant
 from controllers.abstract import AbstractController
 
 class PlayersController(AbstractController):
+    def index(self):
+        if self.players_db.players:
+            self.player_view.display_players_sub_menu()
+            self.player_view.display_players_header()
+            for player in self.players_db.sort_players_alphabetically:
+                self.player_view.display_player(
+                    player.doc_id,
+                    player["first_name"],
+                    player["last_name"],
+                    player["date_of_birth"],
+                    player["sex"],
+                    player["ranking"],
+                )
+            return self.players_db.players
+        self.player_view.display_message_to_user("Aucun joueur n'a pu être trouvé dans la base de données")
+        return None
+        
     def create(self):
         first_name = self.player_view.get_string_value("le prénom", "joueur")
         last_name = self.player_view.get_string_value("le nom", "joueur")
@@ -55,3 +72,59 @@ class PlayersController(AbstractController):
             self.tournaments_db.update_tournament(tournament)
         self.player_view.display_message_to_user("Tous les joueurs nécessaires ont été créés, le tournoi peut commencer")
         
+    def update_players_ranking(self):
+        self.player_view.display_message_to_user("Modifiez le ranking d'un joueur")
+        self.player_view.display_players_header()
+        for player in self.players_db.players:
+            self.player_view.display_player(
+                player.doc_id,
+                player["first_name"],
+                player["last_name"],
+                player["date_of_birth"],
+                player["sex"],
+                player["ranking"],
+            )
+        player_id = self.player_view.get_integer_value("l'id", "joueur")
+        player_found = self.players_db.search_player_by_id(player_id)
+        if player_found:
+            player = Player(
+                player_found["first_name"],
+                player_found["last_name"],
+                player_found["date_of_birth"],
+                player_found["sex"],
+                player_found["ranking"],
+            )
+            self.player_view.display_players_header()
+            self.player_view.display_player(
+                player_found.doc_id,
+                player_found["first_name"],
+                player_found["last_name"],
+                player_found["date_of_birth"],
+                player_found["sex"],
+                player_found["ranking"],
+            )
+            ranking = self.player_view.get_integer_value("le ranking", "joueur")
+            player.ranking = ranking
+            self.players_db.update_player(player, player_id)
+            self.player_view.display_message_to_user(f"Le joueur {player.first_name} {player.last_name} a bien été modifié")
+        else:
+            self.player_view.display_message_to_user("Ancun joueur n'a pu être trouvé avec cet id...")
+                
+    def display_players_by_ranking(self):
+        self.player_view.display_message_to_user("Liste des joueurs triés par ranking")
+        if self.players_db.players:
+            self.player_view.display_players_header()
+            for player in self.players_db.sort_players_by_ranking:
+                self.player_view.display_player(
+                    player.doc_id,
+                    player["first_name"],
+                    player["last_name"],
+                    player["date_of_birth"],
+                    player["sex"],
+                    player["ranking"],
+                )
+            validation = self.player_view.request_user_validation_for_return()
+            if validation == "Y":
+                return self.players_db.players
+        self.player_view.display_message_to_user("Aucun joueur n'a pu être trouvé dans la base de données")
+        return None
