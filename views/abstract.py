@@ -2,7 +2,6 @@ from abc import ABC
 
 
 class AbstractView(ABC):
-    
     @staticmethod
     def main_menu_who_display_possible_choice_to_user():
         print("1. Ajouter un nouveau joueur")
@@ -11,8 +10,8 @@ class AbstractView(ABC):
         print("4. Afficher la liste des joueurs")
         print("5. Afficher la liste des tournois")
         print("0. Quitter le programme")
-        
-    @staticmethod 
+
+    @staticmethod
     def get_user_choice(limit_choice):
         user_choice = ""
         while user_choice not in range(0, limit_choice):
@@ -21,12 +20,12 @@ class AbstractView(ABC):
             except (ValueError, TypeError):
                 print("Désolé votre réponse n'est pas valide")
         return user_choice
-    
+
     @staticmethod
     def exit_program():
         print("Merci d'avoir utilisé ce programme, à bientôt !")
-        
-    @staticmethod    
+
+    @staticmethod
     def request_confirmation():
         validation = ""
         while validation not in ["Y", "N"]:
@@ -36,7 +35,7 @@ class AbstractView(ABC):
                     "Je n'ai pas pu identifier votre réponse, veuillez la saisir à nouveau s'il vous plaît."
                 )
             return validation
-        
+
     @staticmethod
     def request_user_validation_for_return():
         validation = ""
@@ -47,7 +46,7 @@ class AbstractView(ABC):
                     "Je n'ai pas pu identifier votre réponse, veuillez la saisir à nouveau s'il vous plaît."
                 )
             return validation
-        
+
     @staticmethod
     def display_message_to_user(message: str):
         print(f"{message}")
@@ -79,4 +78,3 @@ class AbstractView(ABC):
                 validate = self.request_confirmation()
                 if validate == "Y":
                     return value
-                

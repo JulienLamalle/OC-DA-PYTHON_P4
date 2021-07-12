@@ -1,7 +1,10 @@
 from models.player import Player
 
+
 class Participant(Player):
-    def __init__(self, first_name: str, last_name: str, date_of_birth: str, sex: str, ranking):
+    def __init__(
+        self, first_name: str, last_name: str, date_of_birth: str, sex: str, ranking
+    ):
         self.player_id = None
         self.score = 0
         self.ladder = 0

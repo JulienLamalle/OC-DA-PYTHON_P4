@@ -5,6 +5,7 @@ from views.round import RoundView
 from controllers.database.players import PlayersDatabaseController
 from controllers.database.tournaments import TournamentsDatabaseController
 
+
 class AbstractController(ABC):
     def __init__(self):
         self.player_view = PlayerView()

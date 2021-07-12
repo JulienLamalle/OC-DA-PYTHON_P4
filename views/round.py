@@ -2,6 +2,8 @@ from views.abstract import AbstractView
 from utils.utils import is_float as isFloat
 
 from models.tournament import Tournament
+
+
 class RoundView(AbstractView):
     @staticmethod
     def display_round_sub_menu():
@@ -17,19 +19,21 @@ class RoundView(AbstractView):
             f"{second_player.first_name.center(24)} | "
             f"{second_player.last_name.center(24)}"
         )
-        
+
     def set_player_score(self):
         validation = ""
         while validation != "Y":
             score = input("Entrez le score du joueur (celui-ci doit être un nombre): ")
             if not isFloat(score) or score is None:
-                print("Nous n'avons pas compris votre saisie, veuillez saisir un nombre")
+                print(
+                    "Nous n'avons pas compris votre saisie, veuillez saisir un nombre"
+                )
             else:
                 validation = self.request_confirmation()
                 if validation == "Y":
                     return float(score)
-                
-    @staticmethod        
+
+    @staticmethod
     def display_rounds_header():
         print(
             f"{'Nom'.center(25)} | "
@@ -37,7 +41,7 @@ class RoundView(AbstractView):
             f"{'Fin de ronde'.center(35)}"
             f"\n{'°' * 100}"
         )
-    
+
     @staticmethod
     def display_rounds_list(tournament: Tournament):
         for game_round in tournament.rounds:
@@ -47,7 +51,7 @@ class RoundView(AbstractView):
                 f"{game_round.finished_at.center(35)}"
                 f"\n{'-' * 100}"
             )
-            
+
     @staticmethod
     def display_matchs_list(tournament: Tournament):
         for game_round in tournament.rounds:
@@ -73,4 +77,3 @@ class RoundView(AbstractView):
                     f"{match['match'][1][0]['first_name'].center(20)}"
                     f"\n{'-' * 119}"
                 )
-        

@@ -85,11 +85,10 @@ class TournamentView(AbstractView):
             f"{tournament.end_date} | "
             f"{tournament.time_control}"
         )
-        
+
     @staticmethod
     def display_menu_tournament():
         print(f'{"* MENU TOURNAMENTS*"}'.center(119))
         print("1. Importez un tournoi.")
         print("0. Retour au menu principal.\n")
         print(f'{"=" * 119}')
-    

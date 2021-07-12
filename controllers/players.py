@@ -3,6 +3,7 @@ from models.tournament import Tournament
 from models.participant import Participant
 from controllers.abstract import AbstractController
 
+
 class PlayersController(AbstractController):
     def index(self):
         if self.players_db.players:
@@ -18,60 +19,92 @@ class PlayersController(AbstractController):
                     player["ranking"],
                 )
             return self.players_db.players
-        self.player_view.display_message_to_user("Aucun joueur n'a pu être trouvé dans la base de données")
+        self.player_view.display_message_to_user(
+            "Aucun joueur n'a pu être trouvé dans la base de données"
+        )
         return None
-        
+
     def create(self):
         first_name = self.player_view.get_string_value("le prénom", "joueur")
         last_name = self.player_view.get_string_value("le nom", "joueur")
         if not self.players_db.search_in_players_table(first_name, last_name):
-            date_of_birth = self.player_view.get_string_value("la date de naissance", "joueur")
+            date_of_birth = self.player_view.get_string_value(
+                "la date de naissance", "joueur"
+            )
             sex = self.player_view.get_player_sex()
             ranking = self.player_view.get_integer_value("le rang", "joueur")
-            player = Player(first_name, last_name, date_of_birth, sex , ranking)
+            player = Player(first_name, last_name, date_of_birth, sex, ranking)
             self.players_db.save_player(player)
-            self.player_view.display_message_to_user(f"{first_name} {last_name} a bien été ajouté à la base de données")
+            self.player_view.display_message_to_user(
+                f"{first_name} {last_name} a bien été ajouté à la base de données"
+            )
         else:
-            self.player_view.display_message_to_user(f"Le joueur {first_name} {last_name} existe déjà")
-        
+            self.player_view.display_message_to_user(
+                f"Le joueur {first_name} {last_name} existe déjà"
+            )
+
     def set_players_list(self, tournament: Tournament):
-        actual_players_number_for_tournament = len(tournament.serialize_tournament_players)
+        actual_players_number_for_tournament = len(
+            tournament.serialize_tournament_players
+        )
         while actual_players_number_for_tournament in range(0, 7):
-            actual_players_number_for_tournament = len(tournament.serialize_tournament_players)
-            if  actual_players_number_for_tournament == 0:
+            actual_players_number_for_tournament = len(
+                tournament.serialize_tournament_players
+            )
+            if actual_players_number_for_tournament == 0:
                 self.player_view.display_message_to_user("Creez le 1er joueur")
             else:
-                self.player_view.display_message_to_user(f"Creez le {actual_players_number_for_tournament + 1} joueur")
+                self.player_view.display_message_to_user(
+                    f"Creez le {actual_players_number_for_tournament + 1} joueur"
+                )
             first_name = self.player_view.get_string_value("le prénom", "joueur")
             last_name = self.player_view.get_string_value("le nom", "joueur")
             if [first_name, last_name] not in tournament.players:
-                existing_player = self.players_db.search_in_players_table(first_name, last_name)
+                existing_player = self.players_db.search_in_players_table(
+                    first_name, last_name
+                )
                 if not existing_player:
-                    date_of_birth = self.player_view.get_string_value("la date de naissance", "joueur")
+                    date_of_birth = self.player_view.get_string_value(
+                        "la date de naissance", "joueur"
+                    )
                     sex = self.player_view.get_player_sex()
                     ranking = self.player_view.get_integer_value("le rang", "joueur")
-                    player = Participant(first_name, last_name, date_of_birth, sex , ranking)
+                    player = Participant(
+                        first_name, last_name, date_of_birth, sex, ranking
+                    )
                     tournament.players.append(player)
-                    self.players_db.save_player(Player(first_name, last_name, date_of_birth, sex, ranking))
-                    player_found = self.players_db.search_in_players_table(first_name, last_name)
+                    self.players_db.save_player(
+                        Player(first_name, last_name, date_of_birth, sex, ranking)
+                    )
+                    player_found = self.players_db.search_in_players_table(
+                        first_name, last_name
+                    )
                     player.player_id = player_found.doc_id
-                    self.player_view.display_message_to_user(f"Le joueur {player.first_name} {player.last_name} a bien été ajouté")
+                    self.player_view.display_message_to_user(
+                        f"Le joueur {player.first_name} {player.last_name} a bien été ajouté"
+                    )
                 else:
                     player = Participant(
                         existing_player["first_name"],
                         existing_player["last_name"],
                         existing_player["date_of_birth"],
                         existing_player["sex"],
-                        existing_player["ranking"]
+                        existing_player["ranking"],
                     )
                     player.player_id = existing_player.doc_id
                     tournament.players.append(player)
-                    self.player_view.display_message_to_user(f"Le joueur {player.first_name} {player.last_name} a bien été ajouté au tournoi")
+                    self.player_view.display_message_to_user(
+                        f"Le joueur {player.first_name} {player.last_name} a bien été ajouté au tournoi"
+                    )
             else:
-                self.player_view.display_message_to_user(f"Le joueur {player.first_name} {player.last_name} est déjà présent dans le tournoi")
+                self.player_view.display_message_to_user(
+                    f"Le joueur {player.first_name} {player.last_name} est déjà présent dans le tournoi"
+                )
             self.tournaments_db.update_tournament(tournament)
-        self.player_view.display_message_to_user("Tous les joueurs nécessaires ont été créés, le tournoi peut commencer")
-        
+        self.player_view.display_message_to_user(
+            "Tous les joueurs nécessaires ont été créés, le tournoi peut commencer"
+        )
+
     def update_players_ranking(self):
         self.player_view.display_message_to_user("Modifiez le ranking d'un joueur")
         self.player_view.display_players_header()
@@ -106,10 +139,14 @@ class PlayersController(AbstractController):
             ranking = self.player_view.get_integer_value("le ranking", "joueur")
             player.ranking = ranking
             self.players_db.update_player(player, player_id)
-            self.player_view.display_message_to_user(f"Le joueur {player.first_name} {player.last_name} a bien été modifié")
+            self.player_view.display_message_to_user(
+                f"Le joueur {player.first_name} {player.last_name} a bien été modifié"
+            )
         else:
-            self.player_view.display_message_to_user("Ancun joueur n'a pu être trouvé avec cet id...")
-                
+            self.player_view.display_message_to_user(
+                "Ancun joueur n'a pu être trouvé avec cet id..."
+            )
+
     def display_players_by_ranking(self):
         self.player_view.display_message_to_user("Liste des joueurs triés par ranking")
         if self.players_db.players:
@@ -126,5 +163,7 @@ class PlayersController(AbstractController):
             validation = self.player_view.request_user_validation_for_return()
             if validation == "Y":
                 return self.players_db.players
-        self.player_view.display_message_to_user("Aucun joueur n'a pu être trouvé dans la base de données")
+        self.player_view.display_message_to_user(
+            "Aucun joueur n'a pu être trouvé dans la base de données"
+        )
         return None
