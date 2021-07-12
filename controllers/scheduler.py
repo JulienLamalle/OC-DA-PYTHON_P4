@@ -37,6 +37,7 @@ class SchedulerController:
             2: self.create_new_tournament,
             3: self.use_existing_tournament,
             4: self.display_players,
+            5: self.display_tournaments,
             0: self.exit_program
         }
         getattr(commands[user_choice]())
@@ -46,6 +47,21 @@ class SchedulerController:
         if players:
             user_choice = self.player_controller.player_view.get_user_choice(4)
             self.execute_user_choice_about_players(user_choice)
+        self.perform()
+        
+    def display_tournaments(self):
+        self.tournament_controller.tournament_view.display_menu_tournament()
+        tournaments = self.tournament_controller.index()
+        if tournaments:
+            user_choice = self.tournament_controller.tournament_view.get_user_choice(2)
+            self.execute_user_choice_about_tournaments(user_choice)
+        self.perform()
+    
+    def execute_user_choice_about_tournaments(self, user_choice: int):
+        if user_choice == 1:
+            self.use_existing_tournament()
+        elif user_choice == 2:
+            self.perform()
         
     def execute_user_choice_about_players(self, user_choice: int):
         if user_choice == 1:
