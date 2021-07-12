@@ -5,7 +5,6 @@ from models.round import Round
 from models.match import Match
 
 from datetime import datetime
-import time
 
 
 class TournamentsController(AbstractController):
@@ -140,7 +139,7 @@ class TournamentsController(AbstractController):
                             first_player, second_player
                         )
                     self.round_view.display_message_to_user(
-                        f"{game_round.name} est en cours, Patientez jusque la fin des matchs avant d'inscrire les résultats"
+                        f"{game_round.name} est en cours,Patientez jusque la fin des matchs pour inscrire les score"
                     )
                     self.round_view.display_message_to_user(
                         "Si vous quittez celle-ci, la ronde sera supprimée"
@@ -198,7 +197,7 @@ class TournamentsController(AbstractController):
                 player.ladder = ladder
                 ladder += 1
             self.round_view.display_message_to_user(
-                f"Le tournoi est TERMINÉ! Vous pouvez désormais afficher les résultats"
+                "Le tournoi est TERMINÉ! Vous pouvez désormais afficher les résultats"
             )
         else:
             self.round_view.display_message_to_user(

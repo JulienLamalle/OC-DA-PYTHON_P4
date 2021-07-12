@@ -56,8 +56,9 @@ class AbstractView(ABC):
         while validate != "Y":
             value = input(f"Veuillez saisir {first_argument} du {second_argument}: ")
             if not value:
+                print("Votre saisie n'a pas été comprise")
                 print(
-                    f"Votre saisie n'a pas été comprise, veuillez rééssayer d'indiquer {first_argument} du {second_argument}"
+                    f"veuillez rééssayer d'indiquer {first_argument} du {second_argument}"
                 )
             else:
                 print(f"{first_argument} du {second_argument} est : {value}")
@@ -70,8 +71,9 @@ class AbstractView(ABC):
         while validate != "Y":
             value = input(f"Veuillez saisir {first_argument} du {second_argument}: ")
             if not value.isnumeric() or not value:
+                print("Votre saisie n'a pas été comprise")
                 print(
-                    f"Votre saisie n'a pas été comprise, veuillez rééssayer d'indiquer {first_argument} du {second_argument}"
+                    f"veuillez rééssayer d'indiquer {first_argument} du {second_argument}"
                 )
             else:
                 print(f"{first_argument} du {second_argument} est : {value}")

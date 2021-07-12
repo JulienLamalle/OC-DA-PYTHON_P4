@@ -71,8 +71,8 @@ class Tournament:
     def generate_first_round_pairs(self):
         players = self.sort_players_by_rank()
         tournament_number_of_players = 8
-        first_players_part = players[0 : int(tournament_number_of_players / 2)]
-        second_players_part = players[int(tournament_number_of_players / 2) :]
+        first_players_part = players[0: int(tournament_number_of_players / 2)]
+        second_players_part = players[int(tournament_number_of_players / 2):]
         players_pairs = []
         index = 0
         for index in range(int(tournament_number_of_players / 2)):

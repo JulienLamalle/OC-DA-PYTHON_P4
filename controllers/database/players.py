@@ -1,4 +1,4 @@
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 from models.player import Player
 
 DATABASE = TinyDB("db/db.json")
