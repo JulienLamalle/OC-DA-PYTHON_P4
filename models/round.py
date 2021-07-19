@@ -20,7 +20,4 @@ class Round:
 
     @property
     def serialize_match(self):
-        serialized_matchs = []
-        for match in self.matchs:
-            serialized_matchs.append(match.serialize_match)
-        return serialized_matchs
+        return [match.serialize_match for match in self.matchs]

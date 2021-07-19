@@ -10,14 +10,13 @@ class Player:
 
     @property
     def serialize_player(self):
-        player = {
+        return {
             "first_name": self.first_name,
             "last_name": self.last_name,
             "date_of_birth": self.date_of_birth,
             "sex": self.sex,
             "ranking": self.ranking,
         }
-        return player
 
     @property
     def serialize_match_player(self):

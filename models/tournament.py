@@ -25,7 +25,7 @@ class Tournament:
 
     @property
     def serialize_tournament(self):
-        tournament = {
+        return {
             "name": self.name,
             "location": self.location,
             "start_date": self.start_date,
@@ -38,35 +38,26 @@ class Tournament:
             "players": self.serialize_tournament_players,
             "rounds": self.serialize_tournament_rounds,
         }
-        return tournament
 
     @property
     def serialize_tournament_players(self):
-        serialized_players = []
-        for player in self.players:
-            serialized_players.append(player.serialize_player)
-        return serialized_players
+        return [player.serialize_player for player in self.players]
 
     @property
     def serialize_tournament_rounds(self):
-        serialized_rounds = []
-        for round in self.rounds:
-            serialized_rounds.append(round.serialize_round)
-        return serialized_rounds
+        return [round.serialize_round for round in self.rounds]
 
     def sort_players_by_score(self):
-        sorted_players = sorted(
+        return sorted(
             self.players,
             key=lambda player: (player.score, player.ranking),
             reverse=True,
         )
-        return sorted_players
 
     def sort_players_by_rank(self):
-        sorted_players = sorted(
+        return sorted(
             self.players, key=lambda player: player.ranking, reverse=True
         )
-        return sorted_players
 
     def generate_first_round_pairs(self):
         players = self.sort_players_by_rank()

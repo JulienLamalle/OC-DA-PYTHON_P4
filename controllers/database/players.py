@@ -11,13 +11,11 @@ class PlayersDatabaseController:
 
     @property
     def sort_players_alphabetically(self):
-        sorted_players = sorted(self.players, key=lambda player: player["last_name"])
-        return sorted_players
+        return sorted(self.players, key=lambda player: player["last_name"])
 
     @property
     def sort_players_by_ranking(self):
-        sorted_players = sorted(self.players, key=lambda player: player["ranking"])
-        return sorted_players
+        return sorted(self.players, key=lambda player: player["ranking"])
 
     def save_player(self, player: object):
         self.players.insert(player.serialize_player)

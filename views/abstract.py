@@ -14,7 +14,7 @@ class AbstractView(ABC):
     @staticmethod
     def get_user_choice(limit_choice):
         user_choice = ""
-        while user_choice not in range(0, limit_choice):
+        while user_choice not in range(limit_choice):
             try:
                 user_choice = int(input("Choisissez ce que vous souhaitez faire :"))
             except (ValueError, TypeError):

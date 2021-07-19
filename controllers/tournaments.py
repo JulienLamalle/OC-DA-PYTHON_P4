@@ -47,68 +47,70 @@ class TournamentsController(AbstractController):
         tournament_id = self.tournament_view.get_integer_value("l'id", "tournoi")
         existing_tournament = self.tournaments_db.search_tournament_by_id(tournament_id)
         if existing_tournament:
-            self.tournament_view.display_tournament(
-                existing_tournament.doc_id,
-                existing_tournament["name"],
-                existing_tournament["location"],
-                existing_tournament["start_date"],
-                existing_tournament["end_date"],
-                existing_tournament["time_control"],
-            )
-            tournament = Tournament(
-                existing_tournament["name"],
-                existing_tournament["location"],
-                existing_tournament["start_date"],
-                existing_tournament["end_date"],
-                existing_tournament["description"],
-                existing_tournament["time_control"],
-            )
-            tournament.tournament_id = existing_tournament.doc_id
-            if existing_tournament["players"]:
-                for existing_player in existing_tournament["players"]:
-                    player = Participant(
-                        existing_player["first_name"],
-                        existing_player["last_name"],
-                        existing_player["date_of_birth"],
-                        existing_player["sex"],
-                        existing_player["ranking"],
+            return self.display_tournament_if_it_exists(existing_tournament)
+        self.tournament_view.display_message_to_user(
+            "Aucun tournoi n'a pu être trouvé"
+        )
+        return None
+
+    def display_tournament_if_it_exists(self, existing_tournament):
+        self.tournament_view.display_tournament(
+            existing_tournament.doc_id,
+            existing_tournament["name"],
+            existing_tournament["location"],
+            existing_tournament["start_date"],
+            existing_tournament["end_date"],
+            existing_tournament["time_control"],
+        )
+        tournament = Tournament(
+            existing_tournament["name"],
+            existing_tournament["location"],
+            existing_tournament["start_date"],
+            existing_tournament["end_date"],
+            existing_tournament["description"],
+            existing_tournament["time_control"],
+        )
+        tournament.tournament_id = existing_tournament.doc_id
+        if existing_tournament["players"]:
+            for existing_player in existing_tournament["players"]:
+                player = Participant(
+                    existing_player["first_name"],
+                    existing_player["last_name"],
+                    existing_player["date_of_birth"],
+                    existing_player["sex"],
+                    existing_player["ranking"],
+                )
+                player.player_id = self.players_db.get_player_id(
+                    existing_player["first_name"],
+                    existing_player["last_name"],
+                )
+                player.score = existing_player["score"]
+                player.ladder = existing_player["ladder"]
+                for opponent in existing_player["opponents"]:
+                    player.opponents.append(opponent)
+                tournament.players.append(player)
+        if existing_tournament["rounds"]:
+            for existing_round in existing_tournament["rounds"]:
+                game_round = Round(
+                    existing_round["name"], existing_round["created_at"]
+                )
+                game_round.start = existing_round["round_in_progress"]
+                game_round.finished_at = existing_round["finished_at"]
+                tournament.rounds.append(game_round)
+                for existing_match in existing_round["matchs"]:
+                    match = Match(
+                        existing_match["match"][0][0],
+                        existing_match["match"][1][0],
+                        existing_match["match"][0][1],
+                        existing_match["match"][1][1],
                     )
-                    player.player_id = self.players_db.get_player_id(
-                        existing_player["first_name"],
-                        existing_player["last_name"],
-                    )
-                    player.score = existing_player["score"]
-                    player.ladder = existing_player["ladder"]
-                    for opponent in existing_player["opponents"]:
-                        player.opponents.append(opponent)
-                    tournament.players.append(player)
-            if existing_tournament["rounds"]:
-                for existing_round in existing_tournament["rounds"]:
-                    game_round = Round(
-                        existing_round["name"], existing_round["created_at"]
-                    )
-                    game_round.start = existing_round["round_in_progress"]
-                    game_round.finished_at = existing_round["finished_at"]
-                    tournament.rounds.append(game_round)
-                    for existing_match in existing_round["matchs"]:
-                        match = Match(
-                            existing_match["match"][0][0],
-                            existing_match["match"][1][0],
-                            existing_match["match"][0][1],
-                            existing_match["match"][1][1],
-                        )
-                        game_round.matchs.append(match)
-            tournament.current_round = existing_tournament["current_round"]
-            tournament.tournament_id = existing_tournament.doc_id
-            self.tournament_view.display_message_to_user(
-                f"Le tournoi {tournament.name} a correctement été trouvé et importé !"
-            )
-            return tournament
-        else:
-            self.tournament_view.display_message_to_user(
-                "Aucun tournoi n'a pu être trouvé"
-            )
-            return None
+                    game_round.matchs.append(match)
+        tournament.current_round = existing_tournament["current_round"]
+        tournament.tournament_id = existing_tournament.doc_id
+        self.tournament_view.display_message_to_user(
+            f"Le tournoi {tournament.name} a correctement été trouvé et importé !"
+        )
+        return tournament
 
     def print_tournament_players(self, tournament: Tournament):
         self.player_view.print_players_tournament_ranking(
@@ -117,7 +119,6 @@ class TournamentsController(AbstractController):
 
     def start_tournament_rounds(self, tournament: Tournament):
         if tournament.current_round <= 4:
-            index = 1
             name = f"Round {tournament.current_round}"
             created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             game_round = Round(name, str(created_at))
@@ -132,6 +133,7 @@ class TournamentsController(AbstractController):
                 players_pairs = tournament.generate_pairs()
             if players_pairs:
                 confirm = ""
+                index = 1
                 while confirm != "Y":
                     self.round_view.display_round_sub_menu()
                     for first_player, second_player in players_pairs:
@@ -192,10 +194,8 @@ class TournamentsController(AbstractController):
         game_round.finished_at = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         game_round.start = False
         if tournament.current_round == 5:
-            ladder = 1
-            for player in tournament.sort_players_by_score():
+            for ladder, player in enumerate(tournament.sort_players_by_score(), start=1):
                 player.ladder = ladder
-                ladder += 1
             self.round_view.display_message_to_user(
                 "Le tournoi est TERMINÉ! Vous pouvez désormais afficher les résultats"
             )

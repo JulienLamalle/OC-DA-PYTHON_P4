@@ -28,26 +28,29 @@ class PlayersController(AbstractController):
         first_name = self.player_view.get_string_value("le prénom", "joueur")
         last_name = self.player_view.get_string_value("le nom", "joueur")
         if not self.players_db.search_in_players_table(first_name, last_name):
-            date_of_birth = self.player_view.get_string_value(
-                "la date de naissance", "joueur"
-            )
-            sex = self.player_view.get_player_sex()
-            ranking = self.player_view.get_integer_value("le rang", "joueur")
-            player = Player(first_name, last_name, date_of_birth, sex, ranking)
-            self.players_db.save_player(player)
-            self.player_view.display_message_to_user(
-                f"{first_name} {last_name} a bien été ajouté à la base de données"
-            )
+            self.create_if_player_does_not_exist(first_name, last_name)
         else:
             self.player_view.display_message_to_user(
                 f"Le joueur {first_name} {last_name} existe déjà"
             )
 
+    def create_if_player_does_not_exist(self, first_name, last_name):
+        date_of_birth = self.player_view.get_string_value(
+            "la date de naissance", "joueur"
+        )
+        sex = self.player_view.get_player_sex()
+        ranking = self.player_view.get_integer_value("le rang", "joueur")
+        player = Player(first_name, last_name, date_of_birth, sex, ranking)
+        self.players_db.save_player(player)
+        self.player_view.display_message_to_user(
+            f"{first_name} {last_name} a bien été ajouté à la base de données"
+        )
+
     def set_players_list(self, tournament: Tournament):
         actual_players_number_for_tournament = len(
             tournament.serialize_tournament_players
         )
-        while actual_players_number_for_tournament in range(0, 7):
+        while actual_players_number_for_tournament in range(7):
             actual_players_number_for_tournament = len(
                 tournament.serialize_tournament_players
             )
@@ -120,32 +123,35 @@ class PlayersController(AbstractController):
         player_id = self.player_view.get_integer_value("l'id", "joueur")
         player_found = self.players_db.search_player_by_id(player_id)
         if player_found:
-            player = Player(
-                player_found["first_name"],
-                player_found["last_name"],
-                player_found["date_of_birth"],
-                player_found["sex"],
-                player_found["ranking"],
-            )
-            self.player_view.display_players_header()
-            self.player_view.display_player(
-                player_found.doc_id,
-                player_found["first_name"],
-                player_found["last_name"],
-                player_found["date_of_birth"],
-                player_found["sex"],
-                player_found["ranking"],
-            )
-            ranking = self.player_view.get_integer_value("le ranking", "joueur")
-            player.ranking = ranking
-            self.players_db.update_player(player, player_id)
-            self.player_view.display_message_to_user(
-                f"Le joueur {player.first_name} {player.last_name} a bien été modifié"
-            )
+            self.update_existing_players_ranking(player_found, player_id)
         else:
             self.player_view.display_message_to_user(
                 "Ancun joueur n'a pu être trouvé avec cet id..."
             )
+
+    def update_existing_players_ranking(self, player_found, player_id):
+        player = Player(
+            player_found["first_name"],
+            player_found["last_name"],
+            player_found["date_of_birth"],
+            player_found["sex"],
+            player_found["ranking"],
+        )
+        self.player_view.display_players_header()
+        self.player_view.display_player(
+            player_found.doc_id,
+            player_found["first_name"],
+            player_found["last_name"],
+            player_found["date_of_birth"],
+            player_found["sex"],
+            player_found["ranking"],
+        )
+        ranking = self.player_view.get_integer_value("le ranking", "joueur")
+        player.ranking = ranking
+        self.players_db.update_player(player, player_id)
+        self.player_view.display_message_to_user(
+            f"Le joueur {player.first_name} {player.last_name} a bien été modifié"
+        )
 
     def display_players_by_ranking(self):
         self.player_view.display_message_to_user("Liste des joueurs triés par ranking")
